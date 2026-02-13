@@ -16,10 +16,10 @@ This repository contains the **Masr Spaces Flutter app** and supporting backend 
 
 **Community → Trust → Utilities → Transactions**
 
-- **Community**: neighborhood-based Spaces and feeds
-- **Trust**: reputation, roles, moderation, reports, bans, mutes, blocks
-- **Utilities**: AI-assisted features and local tools
-- **Transactions**: marketplace listings, buyer–seller chat, orders, disputes, reviews
+- **Community**: neighborhood-based Spaces and feeds  
+- **Trust**: reputation, roles, moderation, reports, bans, mutes, blocks  
+- **Utilities**: AI-assisted features and local tools  
+- **Transactions**: marketplace listings, buyer–seller chat, orders, disputes, reviews  
 
 ---
 
@@ -111,18 +111,17 @@ Optional backend components can exist for custom APIs, but the primary logic is 
 
 ## Repository structure
 
-
-
+```
 journey/
-├── lib/ # Flutter app (screens, models, services, widgets)
-├── pubspec.yaml # Flutter dependencies
-├── analysis_options.yaml # Lint rules
-├── packages/backend/ # Optional Dart backend services (if used)
-│ ├── bin/
-│ ├── lib/
-│ └── pubspec.yaml
+├── lib/                   # Flutter app (screens, models, services, widgets)
+├── pubspec.yaml           # Flutter dependencies
+├── analysis_options.yaml  # Lint rules
+├── packages/backend/      # Optional Dart backend services (if used)
+│   ├── bin/
+│   ├── lib/
+│   └── pubspec.yaml
 └── android/ ios/ web/ macos/ windows/ linux/
-
+```
 
 ---
 
@@ -156,83 +155,78 @@ Your storage policies depend on this folder structure.
 ### 4) Flutter env
 Create a `.env` file at the project root:
 
-
-
+```
 SUPABASE_URL=your_project_url
 SUPABASE_ANON_KEY=your_anon_key
-
+```
 
 Install deps and run:
 
 ```bash
 flutter pub get
 flutter run
+```
 
-Operational notes (important)
-Trending refresh
+---
 
-refresh_trending_24h() uses a materialized view. For concurrent refresh you must have a unique index:
+## Operational notes (important)
 
+### Trending refresh
+`refresh_trending_24h()` uses a materialized view. For concurrent refresh you must have a unique index:
+
+```sql
 create unique index if not exists uq_mv_trending_post_id
 on public.mv_trending_posts_24h (post_id);
-
+```
 
 Then schedule:
 
+```sql
 select public.refresh_trending_24h();
+```
 
-Reputation decay
+### Reputation decay
+`apply_reputation_decay(user_id)` should run after login (once per app launch or periodically).
 
-apply_reputation_decay(user_id) should run after login (once per app launch or periodically).
+---
 
-Security model (high level)
+## Security model (high level)
 
-RLS is the default gate on every table.
+- **RLS is the default gate** on every table.
+- Clients are allowed to read/write only what policies permit.
+- Sensitive actions are done via **RPC (security definer)**:
+  - join space
+  - open dm
+  - open product chat
+  - mark read
+  - create orders / disputes / reviews
+  - moderation actions
+- Global ban triggers enforce hard-deny on writes across the platform.
 
-Clients are allowed to read/write only what policies permit.
+---
 
-Sensitive actions are done via RPC (security definer):
+## Roadmap (execution order)
 
-join space
+1) **Spaces + feed + posting + chat inbox**  
+2) **Moderation & trust** (reports, mutes, bans, blocks, reputation)  
+3) **Marketplace** (listings + product chat)  
+4) **Orders + disputes + reviews**  
+5) **AI utilities layer** (RAG/assistants inside spaces and tools)  
 
-open dm
+---
 
-open product chat
-
-mark read
-
-create orders / disputes / reviews
-
-moderation actions
-
-Global ban triggers enforce hard-deny on writes across the platform.
-
-Roadmap (execution order)
-
-Spaces + feed + posting + chat inbox
-
-Moderation & trust (reports, mutes, bans, blocks, reputation)
-
-Marketplace (listings + product chat)
-
-Orders + disputes + reviews
-
-AI utilities layer (RAG/assistants inside spaces and tools)
-
-Contributing
+## Contributing
 
 This is a startup-grade codebase focused on shipping fast with strong security boundaries.
 If you contribute:
+- keep changes small and reviewable
+- preserve RLS-first design
+- prefer RPC for multi-step operations
+- add migrations / SQL updates with idempotency
 
-keep changes small and reviewable
+---
 
-preserve RLS-first design
-
-prefer RPC for multi-step operations
-
-add migrations / SQL updates with idempotency
-
-License
+## License
 
 MIT License
 
