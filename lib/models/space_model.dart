@@ -1,11 +1,12 @@
-/// Represents a space (neighbourhood or business) within Masr Spaces.
+/// Represents a Space (neighbourhood or business) in Masr Spaces.
+/// Unified model for frontend + backend maps.
 class SpaceModel {
   final String id;
   final String name;
   final String description;
   final String ownerId;
 
-  SpaceModel({
+  const SpaceModel({
     required this.id,
     required this.name,
     required this.description,
@@ -14,10 +15,10 @@ class SpaceModel {
 
   factory SpaceModel.fromMap(Map<String, dynamic> data) {
     return SpaceModel(
-      id: data['id'] as String,
-      name: data['name'] as String,
-      description: data['description'] as String,
-      ownerId: data['owner_id'] as String,
+      id: (data['id'] ?? '').toString(),
+      name: (data['name'] ?? '').toString(),
+      description: (data['description'] ?? '').toString(),
+      ownerId: (data['owner_id'] ?? data['ownerId'] ?? '').toString(),
     );
   }
 
@@ -27,4 +28,18 @@ class SpaceModel {
         'description': description,
         'owner_id': ownerId,
       };
+
+  SpaceModel copyWith({
+    String? id,
+    String? name,
+    String? description,
+    String? ownerId,
+  }) {
+    return SpaceModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      ownerId: ownerId ?? this.ownerId,
+    );
+  }
 }
