@@ -113,14 +113,114 @@ Optional backend components can exist for custom APIs, but the primary logic is 
 
 ```
 journey/
-├── lib/                   # Flutter app (screens, models, services, widgets)
-├── pubspec.yaml           # Flutter dependencies
-├── analysis_options.yaml  # Lint rules
-├── packages/backend/      # Optional Dart backend services (if used)
-│   ├── bin/
-│   ├── lib/
-│   └── pubspec.yaml
+├── lib/
+│   ├── main.dart
+│   ├── app.dart
+│
+│   ├── bootstrap/
+│   │   ├── env.dart
+│   │   ├── supabase_bootstrap.dart
+│   │   └── dependencies.dart
+│
+│   ├── core/
+│   │   ├── config/
+│   │   │   ├── app_config.dart
+│   │   │   ├── routes.dart
+│   │   │   ├── theme.dart
+│   │   │   └── constants.dart
+│   │   ├── errors/
+│   │   │   ├── app_exception.dart
+│   │   │   └── failure.dart
+│   │   ├── utils/
+│   │   │   ├── validators.dart
+│   │   │   ├── formatters.dart
+│   │   │   ├── debounce.dart
+│   │   │   ├── logger.dart
+│   │   │   └── uuid.dart
+│   │   ├── widgets/
+│   │   │   ├── app_scaffold.dart
+│   │   │   ├── app_button.dart
+│   │   │   ├── app_text_field.dart
+│   │   │   ├── empty_state.dart
+│   │   │   ├── loading.dart
+│   │   │   ├── error_view.dart
+│   │   │   └── avatar.dart
+│   │   └── navigation/
+│   │       ├── app_router.dart
+│   │       └── route_guards.dart
+│
+│   ├── shared/
+│   │   ├── data/
+│   │   │   ├── models/
+│   │   │   │   ├── paged_result.dart
+│   │   │   │   └── media_asset.dart
+│   │   │   ├── mappers/
+│   │   │   ├── repositories/
+│   │   │   └── services/
+│   │   │       ├── storage_service.dart
+│   │   │       └── realtime_service.dart
+│   │   └── presentation/
+│   │       ├── state/
+│   │       └── widgets/
+│
+│   ├── features/
+│   │
+│   │   ├── auth/
+│   │   │   ├── data/
+│   │   │   │   ├── models/
+│   │   │   │   │   └── user_profile_model.dart
+│   │   │   │   ├── repositories/
+│   │   │   │   │   ├── auth_repository.dart
+│   │   │   │   │   └── profile_repository.dart
+│   │   │   │   └── datasources/
+│   │   │   │       ├── auth_remote_ds.dart
+│   │   │   │       └── profile_remote_ds.dart
+│   │   │   ├── domain/
+│   │   │   │   ├── entities/
+│   │   │   │   │   └── user_profile.dart
+│   │   │   │   └── usecases/
+│   │   │   │       ├── sign_in.dart
+│   │   │   │       ├── sign_up.dart
+│   │   │   │       ├── sign_out.dart
+│   │   │   │       ├── get_me.dart
+│   │   │   │       └── update_profile.dart
+│   │   │   └── presentation/
+│   │   │       ├── pages/
+│   │   │       │   ├── login_page.dart
+│   │   │       │   ├── register_page.dart
+│   │   │       │   └── auth_gate.dart
+│   │   │       ├── widgets/
+│   │   │       │   ├── login_form.dart
+│   │   │       │   └── register_form.dart
+│   │   │       └── state/
+│   │   │           ├── auth_controller.dart
+│   │   │           └── auth_state.dart
+│   │
+│   │   ├── spaces/
+│   │   ├── posts/
+│   │   ├── social/
+│   │   ├── chat/
+│   │   ├── marketplace/
+│   │   └── trust/
+│   │       (each feature follows the same clean architecture pattern:
+│   │        data/ → domain/ → presentation/)
+│
+│   ├── ui/
+│   │   ├── shell/
+│   │   │   ├── main_shell.dart
+│   │   │   ├── bottom_nav.dart
+│   │   │   └── app_drawer.dart
+│   │   └── screens/
+│   │       └── home_page.dart
+│
+│   └── l10n/
+│       ├── app_ar.arb
+│       └── app_en.arb
+│
+├── pubspec.yaml
+├── analysis_options.yaml
 └── android/ ios/ web/ macos/ windows/ linux/
+
 ```
 
 ---
