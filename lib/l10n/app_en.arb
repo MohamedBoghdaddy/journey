@@ -1,0 +1,14 @@
+{
+  "@@locale": "en",
+  "appName": "Masr Spaces",
+  "signIn": "Sign in",
+  "signUp": "Sign up",
+  "email": "Email",
+  "password": "Password",
+  "logout": "Logout",
+  "feed": "Feed",
+  "spaces": "Spaces",
+  "inbox": "Inbox",
+  "market": "Market",
+  "me": "Me"
+}
